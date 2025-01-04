@@ -29,4 +29,4 @@ def get_stock_codes():
     return jsonify(stock_codes_json)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=4999)
+    app.run(host='0.0.0.0', port=80)
