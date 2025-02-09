@@ -8,7 +8,8 @@ file_path = "stock_codes.txt"  # 수정된 파일 경로
 
 def read_stock_codes_with_ta(file_path):
     """
-    파일에서 종목 코드와 눌림목 타점을 읽어오는 함수
+    파일에서 종목 코드와 눌림목 타점을 읽어오는 함수.
+    (타점 값으로는 "3/5", "5/10", "3" 등이 올 수 있습니다.)
     """
     stock_data = []
     try:
@@ -36,14 +37,16 @@ stock_data = read_stock_codes_with_ta(file_path)
 @app.route('/submit_stock_codes', methods=['GET'])
 def get_stock_codes():
     """
-    모든 종목 코드와 눌림목 타점을 JSON 형태로 반환하는 엔드포인트
+    모든 종목 코드와 눌림목 타점을 JSON 형태로 반환하는 엔드포인트.
+    (타점 값으로는 "3/5", "5/10", "3" 등이 포함됩니다.)
     """
     return jsonify(stock_data), 200
 
 @app.route('/submit_stock_codes/<ta_point>', methods=['GET'])
 def get_stock_codes_by_ta(ta_point):
     """
-    특정 눌림목 타점(3/5 또는 5/10)에 해당하는 종목 코드를 JSON 형태로 반환하는 엔드포인트
+    특정 눌림목 타점(예: "3/5", "5/10", 또는 "3"타점)에 해당하는 종목 코드를
+    JSON 형태로 반환하는 엔드포인트.
     """
     filtered_stocks = [stock for stock in stock_data if stock['ta_point'] == ta_point]
     if not filtered_stocks:
@@ -53,7 +56,8 @@ def get_stock_codes_by_ta(ta_point):
 @app.route('/add_stock_code', methods=['POST'])
 def add_stock_code():
     """
-    새로운 종목 코드와 타점을 추가하는 엔드포인트
+    새로운 종목 코드와 타점을 추가하는 엔드포인트.
+    타점 값으로 "3/5", "5/10", "3" 등 원하는 값을 사용할 수 있습니다.
     """
     data = request.get_json()
     stock_code = data.get('stock_code')
@@ -90,7 +94,7 @@ def add_stock_code():
 @app.route('/delete_stock_code/<stock_code>', methods=['DELETE'])
 def delete_stock_code(stock_code):
     """
-    특정 종목 코드를 삭제하는 엔드포인트
+    특정 종목 코드를 삭제하는 엔드포인트.
     """
     global stock_data
     stock_to_delete = None
